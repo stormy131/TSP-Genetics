@@ -1,0 +1,15 @@
+/home/who/programming/dot/tsp-genetics/bin/Debug/net7.0/tsp-genetics
+/home/who/programming/dot/tsp-genetics/bin/Debug/net7.0/tsp-genetics.deps.json
+/home/who/programming/dot/tsp-genetics/bin/Debug/net7.0/tsp-genetics.runtimeconfig.json
+/home/who/programming/dot/tsp-genetics/bin/Debug/net7.0/tsp-genetics.dll
+/home/who/programming/dot/tsp-genetics/bin/Debug/net7.0/tsp-genetics.pdb
+/home/who/programming/dot/tsp-genetics/obj/Debug/net7.0/tsp-genetics.csproj.AssemblyReference.cache
+/home/who/programming/dot/tsp-genetics/obj/Debug/net7.0/tsp-genetics.GeneratedMSBuildEditorConfig.editorconfig
+/home/who/programming/dot/tsp-genetics/obj/Debug/net7.0/tsp-genetics.AssemblyInfoInputs.cache
+/home/who/programming/dot/tsp-genetics/obj/Debug/net7.0/tsp-genetics.AssemblyInfo.cs
+/home/who/programming/dot/tsp-genetics/obj/Debug/net7.0/tsp-genetics.csproj.CoreCompileInputs.cache
+/home/who/programming/dot/tsp-genetics/obj/Debug/net7.0/tsp-genetics.dll
+/home/who/programming/dot/tsp-genetics/obj/Debug/net7.0/refint/tsp-genetics.dll
+/home/who/programming/dot/tsp-genetics/obj/Debug/net7.0/tsp-genetics.pdb
+/home/who/programming/dot/tsp-genetics/obj/Debug/net7.0/tsp-genetics.genruntimeconfig.cache
+/home/who/programming/dot/tsp-genetics/obj/Debug/net7.0/ref/tsp-genetics.dll

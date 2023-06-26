@@ -1,92 +1,68 @@
-# TSP-genetics
+﻿# Specifikace pro zápočtový program
 
+## Téma programu
 
+Hlavním cílem zápočtového projektu je naučit se a implementovat evoluční (genetické) algoritmy pro řešení vyhledávacích problémů. Výběr algoritmu je podpořen skutečností, že algoritmus je nejlépe implementován ve stylu OOP, což mi umožní ukázat znalosti získané během semestru. Tento algoritmus budu demonstrovat na řešení klasického Salesmanova problému (TSP). Je dána množina měst a vzdálenost mezi jednotlivými dvojicemi měst, problém spočívá v nalezení nejkratší možné trasy, která navštíví každé město přesně jednou a vrátí se do výchozího bodu.
 
-## Getting started
+## Teorie
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+**Definice pojmů:**
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Generace - množina vygenerovaných řešení
 
-## Add your files
+Сhromozom - instance možného řešení (generační prvky)
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Crossover (operator) - genetický mechanismus používaný ke kombinaci genetické informace dvou rodičů za účelem vytvoření nového potomka.
 
-```
-cd existing_repo
-git remote add origin https://gitlab.mff.cuni.cz/kopyla/tsp-genetics.git
-git branch -M master
-git push -uf origin master
-```
+Mutation (operator) - genetický mechanismus k vytvoření rozmanitosti budoucích generací
 
-## Integrate with your tools
+Selection - proces výběru rodičů, kteří se páří a rekombinují, aby vytvořili potomky pro další generaci
 
-- [ ] [Set up project integrations](https://gitlab.mff.cuni.cz/kopyla/tsp-genetics/-/settings/integrations)
+**Základ genetických algoritmů**
 
-## Collaborate with your team
+Genetické algoritmy (GA) jsou adaptivní heuristické vyhledávací algoritmy, které patří do větší části evolučních algoritmů. Genetické algoritmy vycházejí z myšlenek přírodního výběru a genetiky. Jedná se o inteligentní využití náhodného hledání opatřeného historickými daty k nasměrování hledání do oblasti lepšího výkonu v prostoru řešení. Běžně se používají ke generování kvalitních řešení optimalizačních problémů a problémů vyhledávání.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+Genetické algoritmy simulují proces přírodního výběru, což znamená, že ty druhy, které se dokáží přizpůsobit změnám v prostředí, jsou schopny přežít a rozmnožit se a přejít do další generace. Zjednodušeně řečeno, simulují "přežití nejsilnějších" mezi jedinci po sobě jdoucích generací pro řešení problému. Každá generace se skládá z populace jedinců a každý jedinec představuje bod v prostoru hledání a možné řešení.
 
-## Test and Deploy
+Genetické algoritmy jsou založeny na analogii s genetickou strukturou a chováním chromozomů populace.
 
-Use the built-in continuous integration in GitLab.
+Na této analogii je založen základ GA -
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+- Jedinci v populaci soutěží o zdroje a páření
+- Ti jedinci, kteří jsou úspěšní (nejschopnější), se pak páří, aby vytvořili více potomků než ostatní
+- Geny (některé vlastnosti řešení, které jednotlivec reprezentuje) od "nejschopnějších" rodičů se šíří v celé generaci, to znamená, že někdy rodiče vytvoří potomstvo, které je lepší než kterýkoli z rodičů.
+- Každá následující generace je tak vhodnější pro své prostředí.
 
-***
+## Podrobnosti o realizací a rozhraní programu
 
-# Editing this README
+**I/O:** Program obdrží sadu měst, která jsou zadána svými názvy (indexy) a vzdálenost mezi každé možné dvojice. Po zpracování dat a spuštění algoritmu se uživateli zobrazí nejkratší cesta a její délka.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+- Input - posloupnost možných dvojic měst a vzdálenost mezi nimi
+- Output - posloupnost měst v nalezeném nejlepším řešení
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+**Kódování chromozomu:** permutace měst na cestě
 
-## Name
-Choose a self-explaining name for your project.
+**Crossover:** upravený *One Point Crossover*
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Vyberou se dva chromozomy z aktuální generace. V jejich sadě genů je vybrán bod křížení, podle kterého se části těchto chromozomů přeskupí.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+![](Aspose.Words.e68bafcf-6e8a-4163-a397-b3361ee11f32.001.png)Protože chromozomy v našem případě představují permutace posloupnosti indexů měst, může se stát, že se některý index města bude opakovat (což není povoleno). Proto algoritmus opravíme:
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+1) řekněme, že máme dva chromozomy Táta a Máma.
+1) Vybereme bod křížení (část chromozomu před tímto bodem je hlava chromozomu a zbytek je ocas).
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+První syn - hlava otce + geny od matky, které nebyly v hlavě otce (jejich pořadí je zachováno).
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+PŘÍKLAD
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Father = [ 1, 3, 5, 4, 6, 7, 0, 2, 9, 8]
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+Mother = [ 1, 5, 6, 7, 2, 4, 8, 9, 3, 0] (geny v otce, zbytek)
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+První syn = [ 1, 3, 5, 4, 6, 7, 2, 8, 9, 0] Druhý syn - symetricky
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+**Selection:** *Tournament Selection*
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+Při K-cestném turnajovém výběru vybereme z populace náhodně K jedinců a z nich vybereme nejlepšího, který se stane rodičem. Stejný postup se opakuje při výběru dalšího rodiče.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+**Mutation:** konstanta pravděpodobnosti náhodné změny genu, zjištěná metodou pokusu a omylu
