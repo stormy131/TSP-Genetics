@@ -1,10 +1,10 @@
 namespace Tools{
     class Helper{
-        private static Random rng = new Random();
+        private static Random rnd = new Random();
 
         public static void shuffle<T>(List<T> list){
             for(int i = list.Count - 1; i >= 0; i--){
-                int j = rng.Next(i + 1);
+                int j = rnd.Next(i + 1);
                 T value = list[j];
                 list[j] = list[i];
                 list[i] = value;
@@ -18,6 +18,18 @@ namespace Tools{
             });
 
             return new_list;
+        }
+
+        public static List<int> random_indices<T>(List<T> list, int n){
+            List<int> res = new List<int>();
+            while(n > 0){
+                int i = rnd.Next(list.Count);
+                res.Add(i);
+                list = exclude(list, list[i]);
+                n--;
+            }
+
+            return res;
         }
     }
 }
