@@ -20,6 +20,30 @@ namespace Entities{
 
             return distance;
         }
+
+        public override string ToString(){
+            string res = "";
+            for(int i = 0; i < perm.Count; i++){
+                res += Convert.ToString(perm[i]);
+            }
+
+            return res;
+        }
+
+        public override bool Equals(Object? obj){
+            if ((obj == null) || !this.GetType().Equals(obj.GetType())){
+                return false;
+            } else {
+                Chromosome ch = (Chromosome) obj;
+
+                if(ch.perm.Count != this.perm.Count) return false;
+                for(int i = 0; i < perm.Count; i++){
+                    if(perm[i] != ch.perm[i]) return false;
+                }
+
+                return true;
+            }
+        }
     }
 
     static class Map{
@@ -32,6 +56,10 @@ namespace Entities{
         static public (int, int) get_coords(int city_index){
             List<string> names = new List<string>(cities.Keys);
             return cities[names[city_index]];
+        }
+
+        static public int cities_count {
+            get => cities.Keys.Count;
         }
     }
 }

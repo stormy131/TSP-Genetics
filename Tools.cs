@@ -10,5 +10,14 @@ namespace Tools{
                 list[i] = value;
             }
         }
+
+        public static List<T> exclude<T>(List<T> list, T target){
+            List<T> new_list = new List<T>();
+            list.ForEach((element) => {
+                if(!list.Equals(target)) new_list.Add(element);
+            });
+
+            return new_list;
+        }
     }
 }

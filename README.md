@@ -46,7 +46,8 @@ Na této analogii je založen základ GA -
 
 Vyberou se dva chromozomy z aktuální generace. V jejich sadě genů je vybrán bod křížení, podle kterého se části těchto chromozomů přeskupí.
 
-![](Aspose.Words.e5fc9ef7-cf8f-4d4c-90fa-422d6812a134.001.png)
+![](docs/Aspose.Words.e5fc9ef7-cf8f-4d4c-90fa-422d6812a134.001.png)
+
 Protože chromozomy v našem případě představují permutace posloupnosti indexů měst, může se stát, že se některý index města bude opakovat (což není povoleno). Proto algoritmus opravíme:
 
 1) řekněme, že máme dva chromozomy Táta a Máma.
@@ -66,6 +67,6 @@ První syn = [ 1, 3, 5, 4, 6, 7, 2, 8, 9, 0] Druhý syn - symetricky
 
 Při K-cestném turnajovém výběru vybereme z populace náhodně K jedinců a z nich vybereme nejlepšího, který se stane rodičem. Stejný postup se opakuje při výběru dalšího rodiče.
 
-![](Aspose.Words.e5fc9ef7-cf8f-4d4c-90fa-422d6812a134.002.png)
+![](docs/Aspose.Words.e5fc9ef7-cf8f-4d4c-90fa-422d6812a134.002.png)
 
 **Mutation:** konstanta pravděpodobnosti náhodné změny genu, zjištěná metodou pokusu a omylu
