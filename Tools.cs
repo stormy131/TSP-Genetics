@@ -31,5 +31,9 @@ namespace Tools{
 
             return res;
         }
+
+        // public static string decode_path(List<int> seq){
+
+        // }
     }
 }

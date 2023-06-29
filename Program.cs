@@ -1,12 +1,15 @@
 ﻿using System;
 using Entities;
 using Tools;
-using GA_Solver.Constants;
+using GA_Solver.Consts;
 
 namespace GA_Solver{
     internal class Program{
         private static List<Chromosome> current_generation = new List<Chromosome>();
         private static Random rnd = new Random();
+        private static int gen_counter = 0;
+        private static int no_impr_counter = 0;
+        private static double previous_best = int.MaxValue;
 
         private static Chromosome generate_chromosome(){
             List<int> seq = Enumerable.Range(0, Map.cities_count).ToList();
@@ -16,7 +19,7 @@ namespace GA_Solver{
 
         private static List<Chromosome> spawn_generation(){
             List<Chromosome> result = new List<Chromosome>();
-            for(int i = 0; i < GlobalVars.POPULATION_COUNT; i++){
+            for(int i = 0; i < Config.POPULATION_COUNT; i++){
                 result.Add(generate_chromosome());
             }
 
@@ -27,16 +30,34 @@ namespace GA_Solver{
             return generation.OrderBy(c => c.get_fitness()).First();
         }
 
-        private static Chromosome tournament_selection(List<Chromosome> generation){
-            List<int> indices = Helper.random_indices(generation, 2);
-            Chromosome chrom_a = generation[indices[0]];
-            Chromosome chrom_b = generation[indices[1]];
+        private static Chromosome wheel_selection(List<Chromosome> generation){
+            // FITNESS CONVERSION
+            double fit_sum = generation.Sum(ch => ch.get_fitness());
+            List<double> probability_proportions = generation.Select(ch => fit_sum / ch.get_fitness()).ToList();
+            double prob_sum = probability_proportions.Sum();
+            List<double> normalized_probabilities = probability_proportions.Select(p => p / prob_sum).ToList();
 
-            return chrom_a.get_fitness() > chrom_b.get_fitness() ? chrom_a : chrom_b;
+            // ACCUMULATING PROBABILITIES
+            double accumulator = 0;
+            List<double> acc_probabilities = new List<double>();
+            for(int i = 0; i < normalized_probabilities.Count(); i++){
+                accumulator += normalized_probabilities[i];
+                acc_probabilities.Add(accumulator);
+            }
+
+            // "WHEEL-SPIN"
+            double rnd_value = rnd.NextDouble();
+            for(int i = 0; i < acc_probabilities.Count; i++){
+               if(rnd_value <= acc_probabilities[i]){
+                    return generation[i];
+                }
+            }
+
+            throw new Exception("Probabilities-distrib error");
         }
 
         private static Chromosome crossover(Chromosome chrom_a, Chromosome chrom_b){
-            int crossover_point = rnd.Next(1, GlobalVars.POPULATION_COUNT - 1);
+            int crossover_point = rnd.Next(1, Config.POPULATION_COUNT - 1);
             List<int> offspring_seq = chrom_a.perm.Take(crossover_point).ToList();
             HashSet<int> appeared = new HashSet<int>(offspring_seq);
 
@@ -80,19 +101,19 @@ namespace GA_Solver{
         static void breed(){
             List<Chromosome> next_gen = new List<Chromosome>();
 
-            for(int i = 0; i < GlobalVars.POPULATION_COUNT; i++){
+            for(int i = 0; i < Config.POPULATION_COUNT; i++){
                 // SELECTION
-                Chromosome father = tournament_selection(current_generation);
+                Chromosome father = wheel_selection(current_generation);
                 List<Chromosome> gen_remainder = Helper.exclude(current_generation, father);
-                Chromosome mother = tournament_selection(gen_remainder);
+                Chromosome mother = wheel_selection(gen_remainder);
 
                 // CROSSOVER
                 Chromosome offspring_a = crossover(father, mother);
                 Chromosome offspring_b = crossover(mother, father);
 
                 // MUTATION
-                if(rnd.NextDouble() < GlobalVars.MUTATION_CHANCE) offspring_a = mutate(offspring_a);
-                if(rnd.NextDouble() < GlobalVars.MUTATION_CHANCE) offspring_b = mutate(offspring_b);
+                if(rnd.NextDouble() < Config.MUTATION_CHANCE) offspring_a = mutate(offspring_a);
+                if(rnd.NextDouble() < Config.MUTATION_CHANCE) offspring_b = mutate(offspring_b);
 
                 next_gen.Add(offspring_a);
                 next_gen.Add(offspring_b);
@@ -101,7 +122,7 @@ namespace GA_Solver{
             current_generation.AddRange(next_gen);
             current_generation = current_generation
                 .OrderBy(c => c.get_fitness())
-                .Take(GlobalVars.POPULATION_COUNT)
+                .Take(Config.POPULATION_COUNT)
                 .ToList();
         }
 
@@ -113,11 +134,20 @@ namespace GA_Solver{
 
             current_generation = spawn_generation();
 
-            int count = 1;
-            while(true){
+            while(gen_counter < Config.GENERATIONS_COUNT){
                 breed();
-                System.Console.WriteLine($"GENERATION #{count} - {Math.Round(get_best_chromosome(current_generation).get_fitness())}");
-                count += 1;
+                gen_counter += 1;
+
+                if(no_impr_counter == Config.NO_IMPROVEMENT_GEN) break;
+                else {
+                    double current_best = current_generation.First().get_fitness();
+                    if(current_best < previous_best){
+                        no_impr_counter = 0;
+                        previous_best = current_best;
+                    } else no_impr_counter++;
+                }
+
+                System.Console.WriteLine($"GENERATION #{gen_counter} - {Math.Round(get_best_chromosome(current_generation).get_fitness())}");
             }
         }
     }

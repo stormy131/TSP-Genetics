@@ -1,26 +1,24 @@
-﻿**Specifikace pro zápočtový program Artem Kopyl**
+﻿# Specifikace pro zápočtový program Artem Kopyl
 
-**14.05.2023**
-
-**Téma programu**
+## Téma programu
 
 Hlavním cílem zápočtového projektu je naučit se a implementovat evoluční (genetické) algoritmy pro řešení vyhledávacích problémů. Výběr algoritmu je podpořen skutečností, že algoritmus je nejlépe implementován ve stylu OOP, což mi umožní ukázat znalosti získané během semestru. Tento algoritmus budu demonstrovat na řešení klasického Salesmanova problému (TSP). Je dána množina měst a vzdálenost mezi jednotlivými dvojicemi měst, problém spočívá v nalezení nejkratší možné trasy, která navštíví každé město přesně jednou a vrátí se do výchozího bodu.
 
-**Teorie**
+## Teorie
 
-**Definice pojmů:**
+### Definice pojmů:
 
-Generace - množina vygenerovaných řešení
+*Generace* - množina vygenerovaných řešení
 
-Сhromozom - instance možného řešení (generační prvky)
+*Сhromozom* - instance možného řešení (generační prvky)
 
-Crossover (operator) - genetický mechanismus používaný ke kombinaci genetické informace dvou rodičů za účelem vytvoření nového potomka.
+*Crossover (operator)* - genetický mechanismus používaný ke kombinaci genetické informace dvou rodičů za účelem vytvoření nového potomka.
 
-Mutation (operator) - genetický mechanismus k vytvoření rozmanitosti budoucích generací
+*Mutation (operator)* - genetický mechanismus k vytvoření rozmanitosti budoucích generací
 
-Selection - proces výběru rodičů, kteří se páří a rekombinují, aby vytvořili potomky pro další generaci
+*Selection* - proces výběru rodičů, kteří se páří a rekombinují, aby vytvořili potomky pro další generaci
 
-**Základ genetických algoritmů**
+### Základ genetických algoritmů
 
 Genetické algoritmy (GA) jsou adaptivní heuristické vyhledávací algoritmy, které patří do větší části evolučních algoritmů. Genetické algoritmy vycházejí z myšlenek přírodního výběru a genetiky. Jedná se o inteligentní využití náhodného hledání opatřeného historickými daty k nasměrování hledání do oblasti lepšího výkonu v prostoru řešení. Běžně se používají ke generování kvalitních řešení optimalizačních problémů a problémů vyhledávání.
 
@@ -35,7 +33,7 @@ Na této analogii je založen základ GA -
 - Geny (některé vlastnosti řešení, které jednotlivec reprezentuje) od "nejschopnějších" rodičů se šíří v celé generaci, to znamená, že někdy rodiče vytvoří potomstvo, které je lepší než kterýkoli z rodičů.
 - Každá následující generace je tak vhodnější pro své prostředí.
 
-**Podrobnosti o realizací a rozhraní programu**
+## Podrobnosti o realizací a rozhraní programu
 
 **I/O:** Program obdrží sadu měst, která jsou zadána svými názvy a souřadnicemi na mapě. Po zpracování dat a spuštění algoritmu se uživateli zobrazí nejkratší cesta a její délka.
 
@@ -57,7 +55,7 @@ Protože chromozomy v našem případě představují permutace posloupnosti ind
 
 První syn - hlava otce + geny od matky, které nebyly v hlavě otce (jejich pořadí je zachováno).
 
-PŘÍKLAD
+**PŘÍKLAD**
 
 Father = [ 1, 3, 5, 4, 6, 7, 0, 2, 9, 8]
 
