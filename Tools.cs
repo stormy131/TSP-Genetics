@@ -1,3 +1,6 @@
+using Entities;
+using GA_Solver.Consts;
+
 namespace Tools{
     class Helper{
         private static Random rnd = new Random();
@@ -32,8 +35,39 @@ namespace Tools{
             return res;
         }
 
-        // public static string decode_path(List<int> seq){
+        public static string decode_path(List<int> seq){
+            IEnumerable<string> cities = seq.Select(c => Convert.ToString(c));
+            return String.Join("->", cities);
+        }
 
-        // }
+        public static void input_generator(int city_count){
+            for(int i = 0; i < city_count; i++){
+                Map.add_city(
+                    Convert.ToString(i),
+                    (int) (rnd.NextDouble() * Config.MAP_WIDTH),
+                    (int) (rnd.NextDouble() * Config.MAP_HEIGHT)
+                );
+            }
+        }
+
+        public static int[,] generate_dist_matrix(){
+            int[,] dists = new int[Map.cities_count, Map.cities_count];
+
+            for(int i = 0; i < Map.cities_count; i++){
+                (int, int) city_a = Map.get_coords(i);
+                for(int j = i + 1; j < Map.cities_count; j++){
+                    (int, int) city_b = Map.get_coords(j);
+
+                    int dx = city_a.Item1 - city_b.Item1;
+                    int dy = city_a.Item2 - city_b.Item2;
+                    int d = (int) Math.Sqrt(dx*dx + dy*dy);
+
+                    dists[i,j] = d;
+                    dists[j,i] = d;
+                }
+            }
+
+            return dists;
+        }
     }
 }

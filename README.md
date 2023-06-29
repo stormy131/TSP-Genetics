@@ -40,22 +40,26 @@ Na této analogii je založen základ GA -
 - Input - posloupnost měst a jejich souřadnic
 - Output - posloupnost měst v nalezeném nejlepším řešení
 
-**Kódování chromozomu:** permutace měst na cestě
+Software také podporuje testovací režim, ve kterém jsou data o městech generována nezávisle (uživatel musí pouze zadat počet měst, která chce otestovat).
+
+K tomu musí být program spuštěn s argumentem v příkazovém řádku (ve složce projektu):
+
+    dotnet run (# měst)
+
+**Kódování chromozomu:** *permutace měst na cestě*
 
 **Crossover:** upravený *One Point Crossover*
 
 Vyberou se dva chromozomy z aktuální generace. V jejich sadě genů je vybrán bod křížení, podle kterého se části těchto chromozomů přeskupí.
 
-![](docs/Aspose.Words.59678691-6eda-4ab4-994b-ed90968ae57f.001.png)
-
-Protože chromozomy v našem případě představují permutace posloupnosti indexů měst, může se stát, že se některý index města bude opakovat (což není povoleno). Proto algoritmus opravíme:
+![](docs/Aspose.Words.41fd8b63-57d9-4502-9703-51d5f7654b29.001.png)Protože chromozomy v našem případě představují permutace posloupnosti indexů měst, může se stát, že se některý index města bude opakovat (což není povoleno). Proto algoritmus opravíme:
 
 1) řekněme, že máme dva chromozomy Táta a Máma.
 1) Vybereme bod křížení (část chromozomu před tímto bodem je hlava chromozomu a zbytek je ocas).
 
 První syn - hlava otce + geny od matky, které nebyly v hlavě otce (jejich pořadí je zachováno).
 
-**PŘÍKLAD**
+PŘÍKLAD
 
 Father = [ 1, 3, 5, 4, 6, 7, 0, 2, 9, 8]
 
@@ -63,11 +67,18 @@ Mother = [ 1, 5, 6, 7, 2, 4, 8, 9, 3, 0] (geny v otce, zbytek)
 
 První syn = [ 1, 3, 5, 4, 6, 7, 2, 8, 9, 0] Druhý syn - symetricky
 
-**Selection:** *Tournament Selection*
+**Selection:** *Roulette Wheel Selection (schematický popis principu)*
 
-Při K-cestném turnajovém výběru vybereme z populace náhodně K jedinců a z nich vybereme nejlepšího, který se stane rodičem. Stejný postup se opakuje při výběru dalšího rodiče.
+Vezměme si kruhové kolo. Kolo je rozděleno na n částí, kde n je počet jedinců v populaci. Každý jedinec dostane část kruhu, která je úměrná jeho hodnotě fitness. Na obvodu kola je zvolen pevný bod, jak je znázorněno na obrázku, a kolo se otáčí. Oblast kola, která se nachází před pevným bodem, je vybrána jako rodičovská. Pro druhého rodiče se opakuje stejný postup. Je zřejmé, že zdatnější jedinec má na kole větší část, a tudíž větší šanci, že se při otáčení kola ocitne před pevným bodem. Pravděpodobnost výběru jedince tedy přímo závisí na jeho zdatnosti.
 
-![](docs/Aspose.Words.59678691-6eda-4ab4-994b-ed90968ae57f.002.png)
+Při implementaci používáme následující kroky:
+
+- Vypočítejte S - součet fitnessů
+- Vypočítejte pravděpodobnost výběru jedince (fitness jedince / S).
+- Normalizujte pravděpodobnosti
+- Poté můžeme vybírat jedince k chovu podle jejich pravděpodobností
+
+![](docs/Aspose.Words.41fd8b63-57d9-4502-9703-51d5f7654b29.002.png)
 
 **Mutation:** *Swap Mutation & Inversion Mutation*
 
@@ -75,10 +86,14 @@ Při psaní programu jsem zjistil, že kombinace několika mutačních operátor
 
 *Swap Mutation* - Při výměnné mutaci vybereme náhodně dvě pozice na chromozomu a vyměníme jejich hodnoty.
 
-![](docs/Aspose.Words.59678691-6eda-4ab4-994b-ed90968ae57f.003.png)
+![](docs/Aspose.Words.41fd8b63-57d9-4502-9703-51d5f7654b29.003.png)
 
 *Inversion Mutation* - Z celého chromozomu je vybrána podmnožina genů, která je invertována.
 
-![](docs/Aspose.Words.59678691-6eda-4ab4-994b-ed90968ae57f.004.png)
+![](docs/Aspose.Words.41fd8b63-57d9-4502-9703-51d5f7654b29.004.png)
 
 (Pravděpodobnost mutace v programu byla 5 %.)
+
+**Podmínka ukončení**
+
+Program byl doplněn o kontrolu maximálního počtu vypočtených generací a maximálního počtu generací bez změny nejlepšího chromozomu.

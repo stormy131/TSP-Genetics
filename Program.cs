@@ -48,9 +48,7 @@ namespace GA_Solver{
             // "WHEEL-SPIN"
             double rnd_value = rnd.NextDouble();
             for(int i = 0; i < acc_probabilities.Count; i++){
-               if(rnd_value <= acc_probabilities[i]){
-                    return generation[i];
-                }
+               if(rnd_value <= acc_probabilities[i]) return generation[i];
             }
 
             throw new Exception("Probabilities-distrib error");
@@ -126,14 +124,28 @@ namespace GA_Solver{
                 .ToList();
         }
 
-        public static void Main(){
-            while(Console.ReadLine() is string input){
-                string[] args = input.Split(' ');
-                Map.add_city(args[0], Int32.Parse(args[1]), Int32.Parse(args[2]));
+        public static void Main(string[] args){
+            // INPUT PROCESSING
+            if(args.Length > 0){
+                if(args.Length > 1) throw new Exception("Incorrect commandline arguments (number of them)");
+                try{
+                    Helper.input_generator(Convert.ToInt32(args[0]));
+                } catch {
+                    throw new Exception("Incorrect commandline arguments (type)"); 
+                }
+
+                for(int i = 0; i < Map.cities_count; i++){
+                    (int, int) coords = Map.get_coords(i);
+                    System.Console.WriteLine($"City {i} | ({coords.Item1} {coords.Item2})");
+                }
+            } else {
+                while(Console.ReadLine() is string input){
+                    string[] city_values = input.Split(' ');
+                    Map.add_city(city_values[0], Int32.Parse(city_values[1]), Int32.Parse(city_values[2]));
+                }
             }
 
             current_generation = spawn_generation();
-
             while(gen_counter < Config.GENERATIONS_COUNT){
                 breed();
                 gen_counter += 1;
@@ -149,6 +161,19 @@ namespace GA_Solver{
 
                 System.Console.WriteLine($"GENERATION #{gen_counter} - {Math.Round(get_best_chromosome(current_generation).get_fitness())}");
             }
+
+            Chromosome solution = get_best_chromosome(current_generation);
+            System.Console.WriteLine($"\nFound solution - {solution.get_fitness()}");
+            System.Console.WriteLine(Helper.decode_path(solution.perm));
+
+            // TESTING TOOL
+            // int[,] dists = Helper.generate_dist_matrix();
+            // for(int i = 0; i < Map.cities_count; i++){
+            //     for(int j = 0; j < Map.cities_count; j++){
+            //         System.Console.Write($"{dists[i,j]} ");
+            //     }
+            //     System.Console.WriteLine();
+            // }
         }
     }
 }

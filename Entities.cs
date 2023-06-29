@@ -12,7 +12,6 @@ namespace Entities{
             for(int i = 1; i < perm.Count; i++){
                 (int, int) from = Map.get_coords(perm[i - 1]);
                 (int, int) to = Map.get_coords(perm[i]);
-
                 int dx = to.Item1 - from.Item1;
                 int dy = to.Item2 - from.Item2;
                 distance += Math.Sqrt(dx*dx + dy*dy);
