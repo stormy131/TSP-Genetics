@@ -55,7 +55,8 @@ namespace GA_Solver{
         }
 
         private static Chromosome crossover(Chromosome chrom_a, Chromosome chrom_b){
-            int crossover_point = rnd.Next(1, Config.POPULATION_COUNT - 1);
+            // int crossover_point = rnd.Next(1, Config.POPULATION_COUNT - 1);
+            int crossover_point = rnd.Next(1, chrom_a.perm.Count - 1);
             List<int> offspring_seq = chrom_a.perm.Take(crossover_point).ToList();
             HashSet<int> appeared = new HashSet<int>(offspring_seq);
 
@@ -106,6 +107,7 @@ namespace GA_Solver{
                 Chromosome mother = wheel_selection(gen_remainder);
 
                 // CROSSOVER
+                // (NEED TO CREATE TWO CHROMOSOMES SYMMETRICALLY)
                 Chromosome offspring_a = crossover(father, mother);
                 Chromosome offspring_b = crossover(mother, father);
 
