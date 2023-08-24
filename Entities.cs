@@ -1,3 +1,5 @@
+using Tools;
+
 namespace Entities{
     class Chromosome{
         public List<int> perm {get; set;}
@@ -12,10 +14,14 @@ namespace Entities{
             for(int i = 1; i < perm.Count; i++){
                 (int, int) from = Map.get_coords(perm[i - 1]);
                 (int, int) to = Map.get_coords(perm[i]);
-                int dx = to.Item1 - from.Item1;
-                int dy = to.Item2 - from.Item2;
-                distance += Math.Sqrt(dx*dx + dy*dy);
+                distance += Helper.get_dist(from, to);
             }
+            
+            // COME BACK TO STARING POINT
+            // distance += Helper.get_dist(
+            //     Map.get_coords(perm[perm.Count - 1]),
+            //     Map.get_coords(perm[0])
+            // );
 
             return distance;
         }
@@ -59,6 +65,10 @@ namespace Entities{
 
         static public int cities_count {
             get => cities.Keys.Count;
+        }
+
+        static public string city_name(int index){
+            return cities.Keys.ToList()[index];
         }
     }
 }

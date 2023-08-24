@@ -5,6 +5,12 @@ namespace Tools{
     class Helper{
         private static Random rnd = new Random();
 
+        public static double get_dist((int, int) from, (int, int) to){
+            int dx = to.Item1 - from.Item1;
+            int dy = to.Item2 - from.Item2;
+            return Math.Sqrt(dx*dx + dy*dy);
+        }
+
         public static void shuffle<T>(List<T> list){
             for(int i = list.Count - 1; i >= 0; i--){
                 int j = rnd.Next(i + 1);
@@ -36,7 +42,7 @@ namespace Tools{
         }
 
         public static string decode_path(List<int> seq){
-            IEnumerable<string> cities = seq.Select(c => Convert.ToString(c));
+            IEnumerable<string> cities = seq.Select(c => Map.city_name(c));
             return String.Join("->", cities);
         }
 
