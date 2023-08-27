@@ -139,6 +139,7 @@ namespace GA_Solver{
                 for(int i = 0; i < Map.cities_count; i++){
                     (int, int) coords = Map.get_coords(i);
                     System.Console.WriteLine($"City {i} | ({coords.Item1} {coords.Item2})");
+                    // System.Console.WriteLine($"{coords.Item1} {coords.Item2}");
                 }
             } else {
                 while(Console.ReadLine() is string input){

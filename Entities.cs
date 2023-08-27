@@ -18,10 +18,10 @@ namespace Entities{
             }
             
             // COME BACK TO STARING POINT
-            // distance += Helper.get_dist(
-            //     Map.get_coords(perm[perm.Count - 1]),
-            //     Map.get_coords(perm[0])
-            // );
+            distance += Helper.get_dist( 
+                Map.get_coords(perm[perm.Count - 1]),
+                Map.get_coords(perm[0])
+            );
 
             return distance;
         }
