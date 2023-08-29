@@ -33,7 +33,9 @@ namespace GA_Solver{
         private static Chromosome wheel_selection(List<Chromosome> generation){
             // FITNESS CONVERSION
             double fit_sum = generation.Sum(ch => ch.get_fitness());
-            List<double> probability_proportions = generation.Select(ch => fit_sum / ch.get_fitness()).ToList();
+            List<double> probability_proportions = generation.Select(
+                ch => ch.get_fitness() == 0 ? 1 : fit_sum / ch.get_fitness()
+            ).ToList();
             double prob_sum = probability_proportions.Sum();
             List<double> normalized_probabilities = probability_proportions.Select(p => p / prob_sum).ToList();
 
@@ -51,12 +53,14 @@ namespace GA_Solver{
                if(rnd_value <= acc_probabilities[i]) return generation[i];
             }
 
+
+
             throw new Exception("Probabilities-distrib error");
         }
 
         private static Chromosome crossover(Chromosome chrom_a, Chromosome chrom_b){
             // int crossover_point = rnd.Next(1, Config.POPULATION_COUNT - 1);
-            int crossover_point = rnd.Next(1, chrom_a.perm.Count - 1);
+            int crossover_point = rnd.Next(0, chrom_a.perm.Count - 1);
             List<int> offspring_seq = chrom_a.perm.Take(crossover_point).ToList();
             HashSet<int> appeared = new HashSet<int>(offspring_seq);
 
@@ -167,7 +171,7 @@ namespace GA_Solver{
             }
 
             Chromosome solution = get_best_chromosome(current_generation);
-            System.Console.WriteLine($"\nFound solution - {solution.get_fitness()}");
+            System.Console.WriteLine($"\nFound solution [0-BASED] - {solution.get_fitness()}");
             System.Console.WriteLine(Helper.decode_path(solution.perm));
 
             // TESTING TOOL
