@@ -47,7 +47,7 @@ namespace GA_Solver{
 
             // "WHEEL-SPIN"
             double rnd_value = rnd.NextDouble();
-            for(int i = 0; i < acc_probabilities.Count; i++){
+            for(int i = 0; i < acc_probabilities.Count(); i++){
                if(rnd_value <= acc_probabilities[i]) return generation[i];
             }
 
@@ -104,6 +104,7 @@ namespace GA_Solver{
                 // SELECTION
                 Chromosome father = wheel_selection(current_generation);
                 List<Chromosome> gen_remainder = Helper.exclude(current_generation, father);
+                if (gen_remainder.Count() == 0) break;
                 Chromosome mother = wheel_selection(gen_remainder);
 
                 // CROSSOVER

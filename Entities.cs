@@ -17,7 +17,7 @@ namespace Entities{
                 distance += Helper.get_dist(from, to);
             }
             
-            // COME BACK TO STARING POINT
+            // IN CASE FITNESS INCLUDE COMING BACK TO STARTING POINT
             distance += Helper.get_dist( 
                 Map.get_coords(perm[perm.Count - 1]),
                 Map.get_coords(perm[0])
@@ -35,13 +35,14 @@ namespace Entities{
             return res;
         }
 
+        // CHROMOSOMES ARE EQUAL, IF THEIR SOLUTIONS ARE
         public override bool Equals(Object? obj){
             if ((obj == null) || !this.GetType().Equals(obj.GetType())){
                 return false;
             } else {
                 Chromosome ch = (Chromosome) obj;
 
-                if(ch.perm.Count != this.perm.Count) return false;
+                if(ch.perm.Count != perm.Count) return false;
                 for(int i = 0; i < perm.Count; i++){
                     if(perm[i] != ch.perm[i]) return false;
                 }
@@ -51,6 +52,7 @@ namespace Entities{
         }
     }
 
+    // COLLETION OF AVALIABLE CITIES
     static class Map{
         static private Dictionary<string, (int, int)> cities = new Dictionary<string, (int, int)>();
 

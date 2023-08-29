@@ -23,12 +23,13 @@ namespace Tools{
         public static List<T> exclude<T>(List<T> list, T target){
             List<T> new_list = new List<T>();
             list.ForEach((element) => {
-                if(!list.Equals(target)) new_list.Add(element);
+                if(!element.Equals(target)) new_list.Add(element);
             });
 
             return new_list;
         }
 
+        // GET N RANDOM INDECIES FROM RANGE OF GIVEN LIST
         public static List<int> random_indices<T>(List<T> list, int n){
             List<int> res = new List<int>();
             while(n > 0){
@@ -46,6 +47,7 @@ namespace Tools{
             return String.Join("->", cities);
         }
 
+        // GENERATE RANDOM CITY INPUT, BASED ON REQUIRED NUMBER OF CITIES
         public static void input_generator(int city_count){
             for(int i = 0; i < city_count; i++){
                 Map.add_city(
@@ -56,6 +58,8 @@ namespace Tools{
             }
         }
 
+        // GENERATE MATRIX OF DISTANCES BETWEEN EACH PAIR OF CITIES [FOR CORRECTNESS CHECK]
+        // RESULT[I,J] - SHOWS DISTANCE BETWEEN CITIES WITH INDECIES I AND J
         public static int[,] generate_dist_matrix(){
             int[,] dists = new int[Map.cities_count, Map.cities_count];
 
